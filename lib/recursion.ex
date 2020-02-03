@@ -10,14 +10,22 @@ defmodule CodeFlow.Recursion do
   @moduledoc """
   Fix or complete the code to make the tests pass.
   """
-  # alias CodeFlow.Fake.Customers
-  # alias CodeFlow.Schemas.OrderItem
+   alias CodeFlow.Fake.Customers
+   alias CodeFlow.Schemas.OrderItem
 
   @doc """
   Sum a list of OrderItems to compute the order total.
   """
-  def order_total(_order_items) do
+  def order_total(order_items) do
+    do_order_total(order_items,0)
+  end
 
+  defp do_order_total([%OrderItem{} = order_item | rest], total) do
+    do_order_total(rest, (order_item.quantity * order_item.item.price) + total)
+  end
+
+  defp do_order_total([], total) do
+    total
   end
 
   @doc """
@@ -25,8 +33,20 @@ defmodule CodeFlow.Recursion do
   query to an SQL database. This is just to practice conditionally incrementing
   a counter and looping using recursion.
   """
-  def count_active(_customers) do
+  def count_active(customers) do
+    do_count_active(customers, 0)
+  end
 
+  defp do_count_active([%Customer{active: true} | rest], acc) do
+    do_count_active(rest, acc + 1)
+  end
+
+  defp do_count_active([_customer | rest], acc) do
+    do_count_active(rest, acc)
+  end
+
+  defp do_count_active([], acc) do
+    acc
   end
 
   @doc """
